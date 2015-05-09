@@ -1,0 +1,120 @@
+body {
+	padding: 0;
+	margin: 5px 0 0 0;
+	background-image: url(images/bg.jpg);
+	background-size: 100% 100%;
+	background-repeat: repeat;
+	background-position: 0 0;
+}
+
+.button {
+	cursor: pointer;
+	color: #ff0951;
+	background-color: transparent;
+	padding: 5px;
+	border-radius: 4px;
+	border: 1px solid #ff0951;
+}
+
+.button:hover {
+	background-color:rgba(255,9,81,0.3)
+}
+.button:active {
+	background-color:rgba(255,9,81,0.7)
+}
+
+.logo {
+	display: block;
+	margin: auto;
+}
+
+.wrapper {
+	min-width: 200px;
+	max-width: 400px;
+	overflow: auto;
+}
+
+.inner_wrapper {
+	padding: 4px 8px;
+}
+
+.buttons {
+	width: 100%;
+	margin: 10px 0px;
+	text-align: center;
+}
+
+.spacer {
+	width: 12px;
+	height: 0px;
+	display: inline-block;
+}
+
+#wootrans_list {
+	list-style: none;
+	padding: 0px;
+}
+
+#wootrans_list div {
+	margin: 0 0 10px 0;
+}
+
+#wootrans_list label {
+	background-color: #e5e5ea;
+	border-radius: 6px;
+	padding: 2px 6px;
+}
+
+#wootrans_list label.current {
+	background-color: #ff5e3a;
+	color: white;
+	vertical-align: middle;
+}
+
+.trans_link {
+	padding: 1px;
+	margin-left: 8px;
+	float: right;
+}
+
+.remove_link {
+	padding: 1px;
+	cursor: pointer;
+	color: #ff5e3a;
+	font-weight: bold;
+	margin-left: 8px;
+	float: right;
+}
+
+#sendbox {
+	display: block;
+	width: 184px;
+	background: #eff0f1;
+	padding: 5px 8px 5px 8px;
+}
+
+#sendbox input[type=text] {
+	border-radius: 5px;
+	background: #fff;
+	border: 1px solid #bebfc0;
+	width: 148px;
+	margin: 0;
+	padding: 0;
+}
+
+#sendbox button {
+	border-radius: 5px;
+	background: #eff0f1;
+	border: 0;
+	color: #ff5e3a;
+	padding: 0;
+	width: 30px;
+	font-weight: bold;
+}
+
+#textfield_name {
+	width: 150px;
+}
+
+#button_new {
+}
