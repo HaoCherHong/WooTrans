@@ -3,19 +3,14 @@
 
   "name": "WooTrans",
   "description": "快速在WooTalk建立、切換多個對話！ 在不同電腦上的Chrome間保留對話！",
-  "version": "0.22",
+  "version": "0.31",
 
 	"browser_action": {
-		"default_icon": { 
-			"19": "images/icon-19.png", 
-			"38": "images/icon-38.png" 
-          },
+		"default_icon": "images/icon-19.png",
 		"default_popup": "popup.html"
 	},
   
   "icons": {
-		"16": "images/icon-16.png",
-		"48": "images/icon-48.png",
 		"128": "images/icon-128.png" 
 	},
 	

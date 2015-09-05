@@ -18,13 +18,15 @@ _gaq.push(['_trackPageview']);
 var wootalkUrl = 'https://wootalk.today/'
 var wooTransObjects;
 var currentWooTrans;
+var confirmDialog, confirmButton, cancelButton, confirmLabel, spacer;
+var confirmCallback;
 
 //Share button
 function share() {
 	//Track event
 	_gaq.push(['_trackEvent', 'action', 'share']);
 
-	var win = window.open('https://chrome.google.com/webstore/detail/jonegeahehknbgnifdfbnidfpfigpdcp', '_blank');
+	var win = window.open('https://chrome.google.com/webstore/detail/jonegeahehknbgnifdfbnidfpfigpdcp/?utm_source=wootrans&utm_medium=share%20link&utm_campaign=interlink', '_blank');
 	win.focus();
 }
 
@@ -43,13 +45,14 @@ function save() {
 				//Reached new record, save and track event
 				chrome.storage.sync.set({'maxNumOfSaves': savesNum})
 				_gaq.push(['_trackEvent', 'record', 'saves', 'max', savesNum]);
+				_gaq.push(['_trackEvent', 'record', 'saves: ' + savesNum]);
 			}
 
 			chrome.storage.sync.set({'wooTransObjects': wooTransObjects})
 			
 			//Track event and close
 			_gaq.push(['_trackEvent', 'action', 'save']);
-			window.close();
+			window.location.reload()
 		})
 	});
 }
@@ -64,7 +67,7 @@ function rename() {
 		
 		//Track event and close
 		_gaq.push(['_trackEvent', 'action', 'rename']);
-		window.close();
+		window.location.reload();
 	})
 }
 
@@ -89,7 +92,7 @@ function trans(wooTrans) {
 
 			//Track event and close
 			_gaq.push(['_trackEvent', 'action', 'trans']);
-			window.close();
+			window.close()
 		});
 	});
 }
@@ -101,7 +104,37 @@ function remove(wooTrans) {
 
 	//Track event and close
 	_gaq.push(['_trackEvent', 'action', 'remove']);
-	window.close();
+	window.location.reload();
+}
+
+function hide(element) {
+	if(element.className.indexOf('hidden') === -1) {
+		element.className += ' hidden'
+	}
+}
+
+function show(element) {
+	element.className = element.className.replace(/\bhidden\b/,'');
+}
+
+function confirm(text, callback) {
+	confirmLabel.innerText = text
+	
+	if(confirmCallback) {
+		confirmButton.removeEventListener('click', confirmCallback);
+	}
+	confirmCallback = callback
+	
+	if(!callback) {
+		hide(cancelButton)
+		hide(spacer)
+	} else {
+		show(cancelButton)
+		show(spacer)
+		confirmButton.addEventListener('click', confirmCallback)
+	}
+
+	show(confirmDialog)
 }
 
 //Add WooTrans Object to list
@@ -120,7 +153,9 @@ function addToList(wooTrans) {
 	removeLink.className = 'remove_link'
 	removeLink.innerText = '刪除'
 	removeLink.addEventListener('click', function() {
-		remove(wooTrans)
+		confirm('確定要刪除此對話嗎？', function() {
+			remove(wooTrans)
+		})
 	});
 	div.appendChild(removeLink)
 	
@@ -129,8 +164,12 @@ function addToList(wooTrans) {
 		transButton.className = 'button trans_link'
 		transButton.innerText = '切換'
 		transButton.addEventListener('click', function() {
-			if(currentWooTrans.saved || confirm('現在的對話還沒儲存，確定要切換嗎？')) {
+			if(currentWooTrans.saved) {
 				trans(wooTrans)
+			} else {
+				confirm('對話還沒儲存，確定要切換嗎？', function() {
+					trans(wooTrans)
+				})
 			}
 		});
 		div.appendChild(transButton)
@@ -164,7 +203,21 @@ document.addEventListener('DOMContentLoaded', function() {
 			chrome.tabs.create({index: tab.index + 1, url: wootalkUrl})
 		}
 	});
-	
+
+	//Setup confirm dialog, cancel, confirm button
+	confirmDialog = document.getElementById('confirm_dialog')
+	confirmButton = document.getElementById('button_confirm')
+	cancelButton = document.getElementById('button_cancel')
+	spacer = document.getElementById('spacer')
+	confirmLabel = document.getElementById('dialog_label')
+	cancelButton.addEventListener('click', function() {
+		hide(confirmDialog)
+	})
+	confirmButton.addEventListener('click', function() {
+		hide(confirmDialog)	
+	})
+
+	//Get data
 	chrome.storage.sync.get('wooTransObjects', function(items) {
 	
 		if(items.wooTransObjects != undefined) {
@@ -195,8 +248,16 @@ document.addEventListener('DOMContentLoaded', function() {
 			
 			
 			document.getElementById('button_new').addEventListener('click', function() {
-				if(currentWooTrans.saved || window.confirm('現在的對話還沒儲存，確定要切換嗎？')) {
-					newConversation();
+				if(wooTransObjects.length >= 4) {
+					confirm('達到對話上限了 ：（')
+				} else {
+					if(currentWooTrans.saved) {
+						newConversation();
+					} else {
+						confirm('對話還沒儲存，確定要切換嗎？', function() {
+							newConversation();
+						})
+					}
 				}
 			});
 			document.getElementById('button_share').addEventListener('click', share);
