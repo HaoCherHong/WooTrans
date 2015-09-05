@@ -200,7 +200,7 @@ document.addEventListener('DOMContentLoaded', function() {
 	
 	chrome.tabs.getSelected(null, function(tab) {
 		if(tab.url != wootalkUrl) {
-			chrome.tabs.create({index: tab.index + 1, url: wootalkUrl})
+			chrome.tabs.create({index: tab.index + 1, url: wootalkUrl + '?utm_source=WooTrans&utm_medium=Action%20Button&utm_campaign=WooTrans'})
 		}
 	});
 

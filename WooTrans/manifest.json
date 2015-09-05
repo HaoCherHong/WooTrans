@@ -2,8 +2,9 @@
   "manifest_version": 2,
 
   "name": "WooTrans",
+  "short_name": "WooTrans",
   "description": "快速在WooTalk建立、切換多個對話！ 在不同電腦上的Chrome間保留對話！",
-  "version": "0.31",
+  "version": "1.0",
 
 	"browser_action": {
 		"default_icon": "images/icon-19.png",
